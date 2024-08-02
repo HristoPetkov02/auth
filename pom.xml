@@ -40,6 +40,7 @@
 		<postgresql.version>42.7.3</postgresql.version>
 		<json-patch.version>1.13</json-patch.version>
 		<vavr.version>0.10.4</vavr.version>
+		<flattenpomversion>1.2.7</flattenpomversion>
 	</properties>
 
 	<modules>
@@ -82,7 +83,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>flatten-maven-plugin</artifactId>
-				<version>1.2.7</version> <!-- Use the latest version -->
+				<version>${flattenpomversion}</version>
 				<executions>
 					<execution>
 						<goals>
@@ -91,9 +92,6 @@
 						<phase>process-resources</phase>
 					</execution>
 				</executions>
-				<configuration>
-					<!-- Optional configurations -->
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>
