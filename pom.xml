@@ -5,18 +5,19 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.3.2</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<version>3.3.1</version>
+		<relativePath/>
 	</parent>
 
 
 	<groupId>com.tinqinacademy.auth</groupId>
 	<artifactId>auth</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>${revision}</version>
+	<packaging>pom</packaging>
+
+
 	<name>auth</name>
 	<description>Demo project for Spring Boot</description>
-
-
 	<url/>
 	<licenses>
 		<license/>
@@ -32,9 +33,23 @@
 	</scm>
 
 	<properties>
+		<revision>0.1-SNAPSHOT</revision>
 		<java.version>21</java.version>
+		<lombok.version>1.18.34</lombok.version>
+		<springdoc-openapi-starter-webmvc-ui.version>2.6.0</springdoc-openapi-starter-webmvc-ui.version>
+		<postgresql.version>42.7.3</postgresql.version>
+		<json-patch.version>1.13</json-patch.version>
+		<vavr.version>0.10.4</vavr.version>
 	</properties>
-	
+
+	<modules>
+		<module>persistence</module>
+		<module>domain</module>
+		<module>core</module>
+		<module>api</module>
+		<module>rest</module>
+	</modules>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -42,29 +57,42 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>io.vavr</groupId>
+			<artifactId>vavr</artifactId>
+			<version>${vavr.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+			<version>${lombok.version}</version>
+		</dependency>
 	</dependencies>
+
 
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>flatten-maven-plugin</artifactId>
+				<version>1.2.7</version> <!-- Use the latest version -->
+				<executions>
+					<execution>
+						<goals>
+							<goal>flatten</goal>
+						</goals>
+						<phase>process-resources</phase>
+					</execution>
+				</executions>
 				<configuration>
-					<excludes>
-						<exclude>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</exclude>
-					</excludes>
+					<!-- Optional configurations -->
 				</configuration>
 			</plugin>
 		</plugins>
