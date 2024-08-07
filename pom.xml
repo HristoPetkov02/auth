@@ -41,6 +41,7 @@
 		<json-patch.version>1.13</json-patch.version>
 		<vavr.version>0.10.4</vavr.version>
 		<flattenpomversion>1.2.7</flattenpomversion>
+		<srping-dotenv.version>2.5.4</srping-dotenv.version>
 	</properties>
 
 	<modules>
@@ -74,6 +75,13 @@
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 			<version>${lombok.version}</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>me.paulschwarz</groupId>
+			<artifactId>spring-dotenv</artifactId>
+			<version>${srping-dotenv.version}</version>
 		</dependency>
 	</dependencies>
 
