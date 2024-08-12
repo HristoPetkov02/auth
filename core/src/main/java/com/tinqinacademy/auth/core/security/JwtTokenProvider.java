@@ -1,24 +1,30 @@
 package com.tinqinacademy.auth.core.security;
 
+import com.tinqinacademy.auth.core.exceptions.AuthApiException;
+import com.tinqinacademy.auth.persistence.models.User;
+import com.tinqinacademy.auth.persistence.repository.UserRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import io.jsonwebtoken.io.Decoders;
 
 import javax.crypto.SecretKey;
-import java.util.Date;
-import java.util.stream.Collectors;
+import java.util.*;
+import java.util.function.Function;
 
 @Component
+@RequiredArgsConstructor
 public class JwtTokenProvider {
     @Value("${security.jwt.secret-key}")
     private String JWTSecret;
 
     @Value("${security.jwt.expiration-time}")
     private Integer JWTExpirationDate;
+
+    private final UserRepository userRepository;
 
 
     private SecretKey key() {
@@ -28,40 +34,66 @@ public class JwtTokenProvider {
 
 
     public boolean validateToken(String token) {
+        //TODO: Implement token validation for blacklisted tokens
+        String id;
+        String role;
         try {
-            Jwts.parser()
+            id = extractId(token);
+            role = extractRole(token);
+        }
+        catch (AuthApiException ex){
+            return false;
+        }
+
+        Optional<User> user = userRepository.findById(UUID.fromString(id));
+
+        return user.isPresent() && user.get().getRole().toString().equals(role);
+    }
+
+    public String extractId(String token) {
+        return extractClaim(token,Claims::getSubject);
+    }
+
+    public String extractRole(String token) {
+        return extractClaim(token, claims -> claims.get("role", String.class));
+    }
+
+    private  <T> T extractClaim(String token, Function<Claims,T> claimsResolver){
+        final Claims claims = extractAllClaims(token);
+        return claimsResolver.apply(claims);
+    }
+
+    private Claims extractAllClaims(String token){
+        try {
+            return Jwts
+                    .parser()
                     .verifyWith(key())
                     .build()
-                    .parse(token);
-            return true;
-        } catch (MalformedJwtException | ExpiredJwtException | UnsupportedJwtException | IllegalArgumentException ex) {
-            return false;
+                    .parseSignedClaims(token)
+                    .getPayload();
+        }
+        catch (Exception e){
+            throw new AuthApiException("Invalid JWT.", HttpStatus.UNAUTHORIZED);
         }
     }
 
-    public String getUsername(String token) {
-        Claims claims = Jwts.parser()
-                .verifyWith(key())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
-        return claims.getSubject();
+    public String generateToken(User user){
+        return generateToken(new HashMap<>(), user);
     }
 
-    public String generateToken(Authentication authentication) {
+
+
+    private String generateToken(Map<String,Object> extraClaims, User user) {
         Date currentDate = new Date();
         Date expireDate = new Date(currentDate.getTime() + JWTExpirationDate);
 
-        String roles = authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(","));
-
         String token = Jwts.builder()
-                .subject(authentication.getName())
+                .claims(extraClaims)
+                .subject(user.getId().toString())
                 .issuedAt(currentDate)
-                .claim("roles", roles)
-                .claim("iat", currentDate.getTime()/ 1000)
-                .claim("exp", expireDate.getTime()/ 1000)
+                .claim("role",user.getRole().name())
+                .claim("iat", currentDate)
+                .claim("exp", expireDate)
                 .expiration(expireDate)
                 .signWith(key())
                 .compact();
