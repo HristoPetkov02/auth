@@ -3,11 +3,13 @@ package com.tinqinacademy.auth.rest.controllers;
 import com.tinqinacademy.auth.api.model.ErrorWrapper;
 import com.tinqinacademy.auth.api.operations.login.LoginInput;
 import com.tinqinacademy.auth.api.operations.login.LoginOutput;
+import com.tinqinacademy.auth.api.operations.promote.PromoteInput;
 import com.tinqinacademy.auth.api.operations.register.RegisterInput;
 import com.tinqinacademy.auth.api.operations.register.RegisterOutput;
 import com.tinqinacademy.auth.api.operations.validatejwt.ValidateJwtInput;
 import com.tinqinacademy.auth.api.restroutes.RestApiRoutes;
 import com.tinqinacademy.auth.core.processors.LoginOperationProcessor;
+import com.tinqinacademy.auth.core.processors.PromoteOperationProcessor;
 import com.tinqinacademy.auth.core.processors.RegisterOperationProcessor;
 import com.tinqinacademy.auth.core.processors.ValidateJwtOperationProcessor;
 import com.tinqinacademy.auth.core.security.JwtTokenProvider;
@@ -28,6 +30,7 @@ public class AuthController extends BaseController {
     private final LoginOperationProcessor loginOperationProcessor;
     private final RegisterOperationProcessor registerOperationProcessor;
     private final ValidateJwtOperationProcessor validateJwtOperationProcessor;
+    private final PromoteOperationProcessor promoteOperationProcessor;
 
     @Operation(summary = "Login", description = "This endpoint is for logging in")
     @ApiResponses(value = {
@@ -62,5 +65,17 @@ public class AuthController extends BaseController {
     public ResponseEntity<?> validateJwt(@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorizationHeader) {
         ValidateJwtInput input = ValidateJwtInput.builder().jwt(authorizationHeader).build();
         return handle(validateJwtOperationProcessor.process(input));
+    }
+
+
+    @Operation(summary = "Promote user to admin", description = "This endpoint is for promoting a user to admin")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully promoted user to admin"),
+            @ApiResponse(responseCode = "400", description = "User is already an admin"),
+            @ApiResponse(responseCode = "404", description = "User not found")
+    })
+    @PostMapping(RestApiRoutes.API_AUTH_PROMOTE)
+    public ResponseEntity<?> promote(@RequestBody PromoteInput input) {
+        return handle(promoteOperationProcessor.process(input));
     }
 }
