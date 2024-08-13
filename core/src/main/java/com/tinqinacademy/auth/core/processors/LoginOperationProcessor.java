@@ -8,7 +8,7 @@ import com.tinqinacademy.auth.api.operations.login.LoginOperation;
 import com.tinqinacademy.auth.api.operations.login.LoginOutput;
 import com.tinqinacademy.auth.core.base.BaseOperationProcessor;
 
-import com.tinqinacademy.auth.core.exceptions.AuthApiException;
+import com.tinqinacademy.auth.api.exceptions.AuthApiException;
 import com.tinqinacademy.auth.core.security.JwtTokenProvider;
 import com.tinqinacademy.auth.persistence.models.User;
 import com.tinqinacademy.auth.persistence.repository.UserRepository;
@@ -18,11 +18,6 @@ import jakarta.validation.Validator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

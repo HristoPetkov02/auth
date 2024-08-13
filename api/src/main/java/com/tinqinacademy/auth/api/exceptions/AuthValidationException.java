@@ -1,4 +1,4 @@
-package com.tinqinacademy.auth.core.exceptions;
+package com.tinqinacademy.auth.api.exceptions;
 
 import com.tinqinacademy.auth.api.model.Error;
 import lombok.Getter;

@@ -5,7 +5,7 @@ import com.tinqinacademy.auth.api.base.OperationInput;
 import com.tinqinacademy.auth.api.base.OperationOutput;
 import com.tinqinacademy.auth.api.interfaces.ErrorHandlerService;
 import com.tinqinacademy.auth.api.model.Error;
-import com.tinqinacademy.auth.core.exceptions.AuthValidationException;
+import com.tinqinacademy.auth.api.exceptions.AuthValidationException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;

@@ -1,6 +1,6 @@
 package com.tinqinacademy.auth.core.security;
 
-import com.tinqinacademy.auth.core.exceptions.AuthApiException;
+import com.tinqinacademy.auth.api.exceptions.AuthApiException;
 import com.tinqinacademy.auth.persistence.models.User;
 import com.tinqinacademy.auth.persistence.repository.UserRepository;
 import io.jsonwebtoken.*;

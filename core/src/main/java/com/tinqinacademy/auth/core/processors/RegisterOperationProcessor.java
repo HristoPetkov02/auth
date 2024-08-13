@@ -7,7 +7,7 @@ import com.tinqinacademy.auth.api.operations.register.RegisterInput;
 import com.tinqinacademy.auth.api.operations.register.RegisterOperation;
 import com.tinqinacademy.auth.api.operations.register.RegisterOutput;
 import com.tinqinacademy.auth.core.base.BaseOperationProcessor;
-import com.tinqinacademy.auth.core.exceptions.AuthApiException;
+import com.tinqinacademy.auth.api.exceptions.AuthApiException;
 import com.tinqinacademy.auth.persistence.models.User;
 import com.tinqinacademy.auth.persistence.repository.UserRepository;
 import io.vavr.control.Either;
