@@ -86,7 +86,11 @@ public class AuthController extends BaseController {
             @ApiResponse(responseCode = "404", description = "User not found")
     })
     @PostMapping(RestApiRoutes.API_AUTH_DEMOTE)
-    public ResponseEntity<?> demote(@RequestBody DemoteInput input) {
-        return handle(demoteOperationProcessor.process(input));
+    public ResponseEntity<?> demote(@RequestBody DemoteInput input, HttpServletRequest request) {
+        DemoteInput updatedInput = DemoteInput.builder()
+                .jwt(request.getHeader(HttpHeaders.AUTHORIZATION))
+                .userId(input.getUserId())
+                .build();
+        return handle(demoteOperationProcessor.process(updatedInput));
     }
 }
