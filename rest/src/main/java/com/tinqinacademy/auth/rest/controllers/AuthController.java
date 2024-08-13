@@ -59,7 +59,7 @@ public class AuthController extends BaseController {
             @ApiResponse(responseCode = "404", description = "Not found.")
     })
     @PostMapping(RestApiRoutes.API_AUTH_CHECK_JWT)
-    public ResponseEntity<?> checkJwt(@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorizationHeader) {
+    public ResponseEntity<?> validateJwt(@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorizationHeader) {
         ValidateJwtInput input = ValidateJwtInput.builder().jwt(authorizationHeader).build();
         return handle(validateJwtOperationProcessor.process(input));
     }
