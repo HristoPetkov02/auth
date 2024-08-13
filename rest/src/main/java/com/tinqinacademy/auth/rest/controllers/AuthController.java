@@ -1,6 +1,7 @@
 package com.tinqinacademy.auth.rest.controllers;
 
 import com.tinqinacademy.auth.api.model.ErrorWrapper;
+import com.tinqinacademy.auth.api.operations.demote.DemoteInput;
 import com.tinqinacademy.auth.api.operations.login.LoginInput;
 import com.tinqinacademy.auth.api.operations.login.LoginOutput;
 import com.tinqinacademy.auth.api.operations.promote.PromoteInput;
@@ -8,10 +9,7 @@ import com.tinqinacademy.auth.api.operations.register.RegisterInput;
 import com.tinqinacademy.auth.api.operations.register.RegisterOutput;
 import com.tinqinacademy.auth.api.operations.validatejwt.ValidateJwtInput;
 import com.tinqinacademy.auth.api.restroutes.RestApiRoutes;
-import com.tinqinacademy.auth.core.processors.LoginOperationProcessor;
-import com.tinqinacademy.auth.core.processors.PromoteOperationProcessor;
-import com.tinqinacademy.auth.core.processors.RegisterOperationProcessor;
-import com.tinqinacademy.auth.core.processors.ValidateJwtOperationProcessor;
+import com.tinqinacademy.auth.core.processors.*;
 import com.tinqinacademy.auth.core.security.JwtTokenProvider;
 import com.tinqinacademy.auth.rest.base.BaseController;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,6 +29,7 @@ public class AuthController extends BaseController {
     private final RegisterOperationProcessor registerOperationProcessor;
     private final ValidateJwtOperationProcessor validateJwtOperationProcessor;
     private final PromoteOperationProcessor promoteOperationProcessor;
+    private final DemoteOperationProcessor demoteOperationProcessor;
 
     @Operation(summary = "Login", description = "This endpoint is for logging in")
     @ApiResponses(value = {
@@ -87,7 +86,7 @@ public class AuthController extends BaseController {
             @ApiResponse(responseCode = "404", description = "User not found")
     })
     @PostMapping(RestApiRoutes.API_AUTH_DEMOTE)
-    public ResponseEntity<?> demote(@RequestBody PromoteInput input) {
-        return handle(promoteOperationProcessor.process(input));
+    public ResponseEntity<?> demote(@RequestBody DemoteInput input) {
+        return handle(demoteOperationProcessor.process(input));
     }
 }

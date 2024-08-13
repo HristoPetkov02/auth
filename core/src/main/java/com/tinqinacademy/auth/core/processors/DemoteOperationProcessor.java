@@ -12,12 +12,17 @@ import com.tinqinacademy.auth.persistence.models.User;
 import com.tinqinacademy.auth.persistence.models.enums.Role;
 import com.tinqinacademy.auth.persistence.repository.UserRepository;
 import io.vavr.control.Either;
+import io.vavr.control.Try;
 import jakarta.validation.Validator;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
+@Component
+@Slf4j
 public class DemoteOperationProcessor extends BaseOperationProcessor<DemoteInput, DemoteOutput> implements DemoteOperation {
     private final UserRepository userRepository;
 
@@ -28,7 +33,9 @@ public class DemoteOperationProcessor extends BaseOperationProcessor<DemoteInput
 
     @Override
     public Either<ErrorWrapper, DemoteOutput> process(DemoteInput input) {
-        return null;
+        return Try.of(() -> demote(input))
+                .toEither()
+                .mapLeft(errorHandlerService::handle);
     }
 
     private User getUser(DemoteInput input) {
