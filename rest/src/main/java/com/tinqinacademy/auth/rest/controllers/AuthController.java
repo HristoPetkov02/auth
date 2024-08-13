@@ -78,4 +78,16 @@ public class AuthController extends BaseController {
     public ResponseEntity<?> promote(@RequestBody PromoteInput input) {
         return handle(promoteOperationProcessor.process(input));
     }
+
+
+    @Operation(summary = "Demote user from admin", description = "This endpoint is for demoting a user from admin")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully demoted user from admin"),
+            @ApiResponse(responseCode = "400", description = "User is not an admin"),
+            @ApiResponse(responseCode = "404", description = "User not found")
+    })
+    @PostMapping(RestApiRoutes.API_AUTH_DEMOTE)
+    public ResponseEntity<?> demote(@RequestBody PromoteInput input) {
+        return handle(promoteOperationProcessor.process(input));
+    }
 }

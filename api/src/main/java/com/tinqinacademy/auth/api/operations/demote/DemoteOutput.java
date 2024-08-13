@@ -1,4 +1,4 @@
-package com.tinqinacademy.auth.api.operations.promote;
+package com.tinqinacademy.auth.api.operations.demote;
 
 import com.tinqinacademy.auth.api.base.OperationOutput;
 import lombok.*;
@@ -8,5 +8,5 @@ import lombok.*;
 @ToString
 @NoArgsConstructor
 @Builder
-public class PromoteOutput implements OperationOutput {
+public class DemoteOutput implements OperationOutput {
 }
