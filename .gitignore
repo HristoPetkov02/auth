@@ -21,6 +21,7 @@ target/
 **/*.flattened-pom.xml
 !pom.xml
 !src/**/*.java
+**/*/.env
 
 ### NetBeans ###
 /nbproject/private/

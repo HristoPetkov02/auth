@@ -5,14 +5,17 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 
-@SpringBootApplication
+@SpringBootApplication(exclude = UserDetailsServiceAutoConfiguration.class)
 @ComponentScan(basePackages = "com.tinqinacademy.auth")
 @EntityScan(basePackages = "com.tinqinacademy.auth.persistence.models")
 @EnableJpaRepositories(basePackages = "com.tinqinacademy.auth.persistence.repository")
+@EnableScheduling
 public class AuthApplication {
 
 	public static void main(String[] args) {
