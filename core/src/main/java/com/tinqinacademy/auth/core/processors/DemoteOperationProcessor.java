@@ -53,7 +53,7 @@ public class DemoteOperationProcessor extends BaseOperationProcessor<DemoteInput
     }
 
 
-    private void validateAmountOfAdmins(DemoteInput input) {
+    private void validateAmountOfAdmins() {
         if (userRepository.countByRole(Role.ADMIN) == 1) {
             throw new AuthApiException("There must be at least one admin", HttpStatus.BAD_REQUEST);
         }
@@ -80,7 +80,7 @@ public class DemoteOperationProcessor extends BaseOperationProcessor<DemoteInput
         logStart(input);
         validateInput(input);
 
-        validateAmountOfAdmins(input);
+        validateAmountOfAdmins();
         checkIfUserDemotesHimself(input);
         User user = getUser(input);
 

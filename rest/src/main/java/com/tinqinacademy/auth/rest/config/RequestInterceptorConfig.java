@@ -16,6 +16,7 @@ public class RequestInterceptorConfig implements WebMvcConfigurer {
         registry.addInterceptor(accessInterceptor)
                 .addPathPatterns(
                         RestApiRoutes.API_AUTH_PROMOTE,
-                        RestApiRoutes.API_AUTH_DEMOTE);
+                        RestApiRoutes.API_AUTH_DEMOTE,
+                        RestApiRoutes.API_AUTH_LOGOUT);
     }
 }

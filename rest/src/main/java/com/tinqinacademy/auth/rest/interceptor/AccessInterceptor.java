@@ -17,10 +17,11 @@ public class AccessInterceptor implements HandlerInterceptor {
     private final JwtTokenProvider jwtTokenProvider;
 
     private final String[] adminRoutes = {RestApiRoutes.API_AUTH_PROMOTE, RestApiRoutes.API_AUTH_DEMOTE};
+    private final String[] userRoutes = {RestApiRoutes.API_AUTH_LOGOUT};
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object object) throws IOException {
-        if (isRouteAdminRoute(request.getRequestURI())) {
+        if (isRoute(request.getRequestURI())) {
             final String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
             if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
@@ -36,7 +37,13 @@ public class AccessInterceptor implements HandlerInterceptor {
                 return false;
             }
 
-            if (!jwtTokenProvider.extractRole(jwt).equals("ADMIN")) {
+            if (isRouteAdminRoute(request.getRequestURI()) && !jwtTokenProvider.extractRole(jwt).equals("ADMIN")) {
+                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                response.getWriter().write("Forbidden.");
+                return false;
+            }
+
+            if (isRouteUserRoute(request.getRequestURI()) && !(jwtTokenProvider.extractRole(jwt).equals("USER") || jwtTokenProvider.extractRole(jwt).equals("ADMIN"))) {
                 response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                 response.getWriter().write("Forbidden.");
                 return false;
@@ -54,4 +61,18 @@ public class AccessInterceptor implements HandlerInterceptor {
         }
         return false;
     }
+
+    private boolean isRouteUserRoute(String uri) {
+        for (String route : userRoutes) {
+            if (uri.equals(route)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isRoute(String uri){
+        return isRouteAdminRoute(uri) || isRouteUserRoute(uri);
+    }
+
 }

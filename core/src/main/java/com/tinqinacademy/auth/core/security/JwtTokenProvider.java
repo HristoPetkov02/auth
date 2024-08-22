@@ -2,6 +2,7 @@ package com.tinqinacademy.auth.core.security;
 
 import com.tinqinacademy.auth.api.exceptions.AuthApiException;
 import com.tinqinacademy.auth.persistence.models.User;
+import com.tinqinacademy.auth.persistence.repository.BlackListedTokenRepository;
 import com.tinqinacademy.auth.persistence.repository.UserRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
@@ -25,6 +26,7 @@ public class JwtTokenProvider {
     private Integer JWTExpirationDate;
 
     private final UserRepository userRepository;
+    private final BlackListedTokenRepository blackListedTokenRepository;
 
 
     private SecretKey key() {
@@ -34,7 +36,9 @@ public class JwtTokenProvider {
 
 
     public boolean validateToken(String token) {
-        //TODO: Implement token validation for blacklisted tokens
+        if (blackListedTokenRepository.existsByToken(token)) {
+            return false;
+        }
         String id;
         String role;
         try {
