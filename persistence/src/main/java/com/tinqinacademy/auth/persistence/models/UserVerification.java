@@ -24,7 +24,7 @@ public class UserVerification {
     @OneToOne
     private User user;
 
-    @Column(name = "verification_code", nullable = false, length = 10)
+    @Column(name = "verification_code", nullable = false, length = 10, unique = true)
     private String verificationCode;
 
     @CreationTimestamp

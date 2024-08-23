@@ -9,4 +9,5 @@ import java.util.UUID;
 
 public interface UserVerificationRepository extends JpaRepository<UserVerification, UUID> {
     Optional<UserVerification> findUserVerificationByUser(User user);
+    Optional<UserVerification> findUserVerificationByVerificationCode(String verificationCode);
 }

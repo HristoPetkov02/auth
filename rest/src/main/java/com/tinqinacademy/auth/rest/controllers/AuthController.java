@@ -2,6 +2,8 @@ package com.tinqinacademy.auth.rest.controllers;
 
 import com.tinqinacademy.auth.api.operations.changepassword.ChangePasswordInput;
 import com.tinqinacademy.auth.api.operations.changepassword.ChangePasswordOperation;
+import com.tinqinacademy.auth.api.operations.confirmregistration.ConfirmRegistrationInput;
+import com.tinqinacademy.auth.api.operations.confirmregistration.ConfirmRegistrationOperation;
 import com.tinqinacademy.auth.api.operations.demote.DemoteInput;
 import com.tinqinacademy.auth.api.operations.demote.DemoteOperation;
 import com.tinqinacademy.auth.api.operations.login.LoginInput;
@@ -35,6 +37,7 @@ public class AuthController extends BaseController {
     private final DemoteOperation demoteOperation;
     private final LogoutOperation logoutOperation;
     private final ChangePasswordOperation changePasswordOperation;
+    private final ConfirmRegistrationOperation confirmRegistrationOperation;
 
     @Operation(summary = "Login", description = "This endpoint is for logging in")
     @ApiResponses(value = {
@@ -127,5 +130,16 @@ public class AuthController extends BaseController {
                 .token(request.getHeader(HttpHeaders.AUTHORIZATION))
                 .build();
         return handle(changePasswordOperation.process(updatedInput));
+    }
+
+
+    @Operation(summary = "Confirm registration", description = "This endpoint is for confirming registration")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully confirmed registration"),
+            @ApiResponse(responseCode = "400", description = "Bad request")
+    })
+    @PostMapping(RestApiRoutes.API_AUTH_CONFIRM_REGISTRATION)
+    public ResponseEntity<?> confirmRegistration(@RequestBody ConfirmRegistrationInput input) {
+        return handle(confirmRegistrationOperation.process(input));
     }
 }
