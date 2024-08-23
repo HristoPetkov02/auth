@@ -1,5 +1,7 @@
 package com.tinqinacademy.auth.rest.controllers;
 
+import com.tinqinacademy.auth.api.operations.changepassword.ChangePasswordInput;
+import com.tinqinacademy.auth.api.operations.changepassword.ChangePasswordOperation;
 import com.tinqinacademy.auth.api.operations.demote.DemoteInput;
 import com.tinqinacademy.auth.api.operations.demote.DemoteOperation;
 import com.tinqinacademy.auth.api.operations.login.LoginInput;
@@ -32,6 +34,7 @@ public class AuthController extends BaseController {
     private final PromoteOperation promoteOperation;
     private final DemoteOperation demoteOperation;
     private final LogoutOperation logoutOperation;
+    private final ChangePasswordOperation changePasswordOperation;
 
     @Operation(summary = "Login", description = "This endpoint is for logging in")
     @ApiResponses(value = {
@@ -109,5 +112,20 @@ public class AuthController extends BaseController {
                 .token(request.getHeader(HttpHeaders.AUTHORIZATION))
                 .build();
         return handle(logoutOperation.process(input));
+    }
+
+
+    @Operation(summary = "Change password", description = "This endpoint is for changing password")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully changed password"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "404", description = "User not found")
+    })
+    @PostMapping(RestApiRoutes.API_AUTH_CHANGE_PASSWORD)
+    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordInput input, HttpServletRequest request) {
+        ChangePasswordInput updatedInput = input.toBuilder()
+                .token(request.getHeader(HttpHeaders.AUTHORIZATION))
+                .build();
+        return handle(changePasswordOperation.process(updatedInput));
     }
 }
