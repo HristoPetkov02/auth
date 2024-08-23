@@ -9,4 +9,7 @@ public class RestApiRoutes {
     public final static String API_AUTH_PROMOTE = API + "/auth/promote";
     public final static String API_AUTH_DEMOTE = API + "/auth/demote";
     public final static String API_AUTH_LOGOUT = API + "/auth/logout";
+    public final static String API_AUTH_CHANGE_PASSWORD = API + "/auth/change-password";
+    public final static String API_AUTH_CONFIRM_REGISTRATION = API + "/auth/confirm-registration";
+    public final static String API_AUTH_RECOVER_PASSWORD = API + "/auth/recover-password";
 }

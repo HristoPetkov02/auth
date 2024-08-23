@@ -36,5 +36,11 @@
             <artifactId>json-patch</artifactId>
             <version>${json-patch.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.retry</groupId>
+            <artifactId>spring-retry</artifactId>
+            <version>${spring-retry.version}</version>
+        </dependency>
     </dependencies>
 </project>

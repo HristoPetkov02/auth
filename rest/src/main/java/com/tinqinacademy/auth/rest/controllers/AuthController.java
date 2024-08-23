@@ -1,5 +1,9 @@
 package com.tinqinacademy.auth.rest.controllers;
 
+import com.tinqinacademy.auth.api.operations.changepassword.ChangePasswordInput;
+import com.tinqinacademy.auth.api.operations.changepassword.ChangePasswordOperation;
+import com.tinqinacademy.auth.api.operations.confirmregistration.ConfirmRegistrationInput;
+import com.tinqinacademy.auth.api.operations.confirmregistration.ConfirmRegistrationOperation;
 import com.tinqinacademy.auth.api.operations.demote.DemoteInput;
 import com.tinqinacademy.auth.api.operations.demote.DemoteOperation;
 import com.tinqinacademy.auth.api.operations.login.LoginInput;
@@ -8,6 +12,8 @@ import com.tinqinacademy.auth.api.operations.logout.LogoutInput;
 import com.tinqinacademy.auth.api.operations.logout.LogoutOperation;
 import com.tinqinacademy.auth.api.operations.promote.PromoteInput;
 import com.tinqinacademy.auth.api.operations.promote.PromoteOperation;
+import com.tinqinacademy.auth.api.operations.recoverpassword.RecoverPasswordInput;
+import com.tinqinacademy.auth.api.operations.recoverpassword.RecoverPasswordOperation;
 import com.tinqinacademy.auth.api.operations.register.RegisterInput;
 import com.tinqinacademy.auth.api.operations.register.RegisterOperation;
 import com.tinqinacademy.auth.api.operations.validatejwt.ValidateJwtInput;
@@ -20,6 +26,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +39,9 @@ public class AuthController extends BaseController {
     private final PromoteOperation promoteOperation;
     private final DemoteOperation demoteOperation;
     private final LogoutOperation logoutOperation;
+    private final ChangePasswordOperation changePasswordOperation;
+    private final ConfirmRegistrationOperation confirmRegistrationOperation;
+    private final RecoverPasswordOperation recoverPasswordOperation;
 
     @Operation(summary = "Login", description = "This endpoint is for logging in")
     @ApiResponses(value = {
@@ -51,7 +61,7 @@ public class AuthController extends BaseController {
     })
     @PostMapping(RestApiRoutes.API_AUTH_REGISTER)
     public ResponseEntity<?> register(@RequestBody RegisterInput input) {
-        return handle(registerOperation.process(input));
+        return handleWithCode(registerOperation.process(input), HttpStatus.CREATED);
     }
 
 
@@ -109,5 +119,41 @@ public class AuthController extends BaseController {
                 .token(request.getHeader(HttpHeaders.AUTHORIZATION))
                 .build();
         return handle(logoutOperation.process(input));
+    }
+
+
+    @Operation(summary = "Change password", description = "This endpoint is for changing password")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully changed password"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "404", description = "User not found")
+    })
+    @PostMapping(RestApiRoutes.API_AUTH_CHANGE_PASSWORD)
+    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordInput input, HttpServletRequest request) {
+        ChangePasswordInput updatedInput = input.toBuilder()
+                .token(request.getHeader(HttpHeaders.AUTHORIZATION))
+                .build();
+        return handle(changePasswordOperation.process(updatedInput));
+    }
+
+
+    @Operation(summary = "Confirm registration", description = "This endpoint is for confirming registration")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully confirmed registration"),
+            @ApiResponse(responseCode = "400", description = "Bad request")
+    })
+    @PostMapping(RestApiRoutes.API_AUTH_CONFIRM_REGISTRATION)
+    public ResponseEntity<?> confirmRegistration(@RequestBody ConfirmRegistrationInput input) {
+        return handle(confirmRegistrationOperation.process(input));
+    }
+
+
+    @Operation(summary = "Recover password", description = "This endpoint is for recovering password")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully recovered password")
+    })
+    @PostMapping(RestApiRoutes.API_AUTH_RECOVER_PASSWORD)
+    public ResponseEntity<?> recoverPassword(@RequestBody RecoverPasswordInput input) {
+        return handle(recoverPasswordOperation.process(input));
     }
 }

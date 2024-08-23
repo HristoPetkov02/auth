@@ -17,7 +17,7 @@ public class AccessInterceptor implements HandlerInterceptor {
     private final JwtTokenProvider jwtTokenProvider;
 
     private final String[] adminRoutes = {RestApiRoutes.API_AUTH_PROMOTE, RestApiRoutes.API_AUTH_DEMOTE};
-    private final String[] userRoutes = {RestApiRoutes.API_AUTH_LOGOUT};
+    private final String[] userRoutes = {RestApiRoutes.API_AUTH_LOGOUT, RestApiRoutes.API_AUTH_CHANGE_PASSWORD};
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object object) throws IOException {
